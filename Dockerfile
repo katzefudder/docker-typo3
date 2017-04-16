@@ -1,12 +1,9 @@
-FROM tutum/apache-php:latest
-MAINTAINER Johannes Goslar
-
-# add source for newer CURL version that has many bugfixes required for some operations
-ADD apt-source-costamagnagianfranco_ettercap-stable-backports /etc/apt/sources.list.d/costamagnagianfranco-ettercap-stable-backports-trusty.list
+FROM php:7.1-apache
+MAINTAINER Florian Dehn
 
 # Install packages
 RUN apt-get update && \
-apt-get -yq --force-yes install mysql-client git curl imagemagick php5-imagick && \
+apt-get -yq --force-yes install mysql-client git curl imagemagick && \
 rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod rewrite
@@ -17,6 +14,7 @@ ADD typo3.php.ini /etc/php5/conf.d/
 
 RUN rm -fr /app && mkdir /app
 VOLUME [ "/app/uploads", "/app/fileadmin"]
+RUN rm -fr /var/www/html && ln -s /app /var/www/html
 
 # Add script to create 'typo3' DB
 ADD run-typo3.sh /run-typo3.sh
@@ -34,6 +32,11 @@ EXPOSE 80
 CMD ["/bin/bash", "-c", "/run-typo3.sh"]
 
 ADD AdditionalConfiguration.php /app/typo3conf/
+
+RUN /usr/local/bin/docker-php-ext-install mysqli
+
+# Install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install dependencies defined in composer.json
 ADD composer.json /app/
