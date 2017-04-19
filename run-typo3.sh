@@ -18,53 +18,16 @@ echo "      Database Username:      $DB_USER"
 echo "========================================================================"
 echo "=> Waiting for database ..."
 
-for ((i=0;i<15;i++))
-do
-    DB_CONNECTABLE=$(mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT -e 'status' >/dev/null 2>&1; echo "$?")
-    if [[ DB_CONNECTABLE -eq 0 ]]; then
-        break
-    fi
-    sleep 3
-done
-
-if [[ $DB_CONNECTABLE -eq 0 ]]; then
-    DB_EXISTS=$(mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT -e "SHOW DATABASES LIKE '"$DB_NAME"';" 2>&1 |grep "$DB_NAME" > /dev/null ; echo "$?")
-
-    if [[ DB_EXISTS -eq 1 ]]; then
-        echo "=> Creating database $DB_NAME"
-        RET=$(mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT -e "CREATE DATABASE $DB_NAME")
-        if [[ RET -ne 0 ]]; then
-            echo "Cannot create database for TYPO3"
-            exit RET
-        fi
-        if [ -f /initial_db.sql ]; then
-            echo "=> Loading initial database data to $DB_NAME"
-            RET=$(mysql -u$DB_USER -p$DB_PASS -h$DB_HOST -P$DB_PORT $DB_NAME < /initial_db.sql)
-            if [[ RET -ne 0 ]]; then
-                echo "Cannot load initial database data for TYPO3"
-                exit RET
-            fi
-        fi
-
-        echo "=> Done!"
-    else
-        echo "=> Skipped creation of database $DB_NAME – it already exists."
-    fi
-else
-    echo "Cannot connect to Mysql"
-    exit $DB_CONNECTABLE
-fi
-
 if [ ! -f /app/typo3conf/LocalConfiguration.php ]
-    then
-        php Scripts/typo3cms install:setup --non-interactive \
-        --database-user-name="admin" --database-user-password="$DB_PASS" \
-        --database-host-name="$DB_HOST" --database-port="$DB_PORT" --database-name="$DB_NAME" \
-        --admin-user-name="admin" --admin-password="password" \
-        --site-name="TYPO3 Demo Installation" --site-setup-type="createsite"
+then
+	php /app/Packages/Libraries/helhum/typo3-console/Scripts/typo3cms install:setup --non-interactive \
+    --database-user-name="admin" --database-user-password="$DB_PASS" \
+    --database-host-name="$DB_HOST" --database-port="$DB_PORT" --database-name="$DB_NAME" \
+    --admin-user-name="admin" --admin-password="password" \
+    --site-name="TYPO3 Demo Installation" --site-setup-type="createsite"
 
-        echo "Set permissions for /app folder ..."
-        chown www-data:www-data -R /app/fileadmin /app/typo3temp /app/uploads
+    echo "Set permissions for /app folder ..."
+    chown www-data:www-data -R /app/fileadmin /app/typo3temp /app/uploads
 fi
 
 # Start apache in foreground if no arguments are given
