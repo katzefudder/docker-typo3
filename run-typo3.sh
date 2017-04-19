@@ -57,16 +57,11 @@ fi
 
 if [ ! -f /app/typo3conf/LocalConfiguration.php ]
     then
-        php typo3cms install:setup --non-interactive \
-            --database-user-name="admin" \
-            --database-host-name="$DB_HOST" \
-            --database-port="$DB_PORT" \
-            --database-name="$DB_NAME" \
-            --database-user-password="$DB_PASS" \
-            --database-create=0 \
-            --admin-user-name="admin" \
-            --admin-password="password" \
-            --site-name="TYPO3 Demo Installation"
+        php Scripts/typo3cms install:setup --non-interactive \
+        --database-user-name="admin" --database-user-password="$DB_PASS" \
+        --database-host-name="$DB_HOST" --database-port="$DB_PORT" --database-name="$DB_NAME" \
+        --admin-user-name="admin" --admin-password="password" \
+        --site-name="TYPO3 Demo Installation" --site-setup-type="createsite"
 
         echo "Set permissions for /app folder ..."
         chown www-data:www-data -R /app/fileadmin /app/typo3temp /app/uploads

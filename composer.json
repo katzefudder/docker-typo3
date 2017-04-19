@@ -16,7 +16,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "http://composer.typo3.org/"
+            "url": "https://composer.typo3.org/"
         },
         {
             "type": "vcs",
@@ -24,7 +24,7 @@
         }
     ],
     "require": {
-        "typo3/cms": "^7.6",
-        "helhum/typo3-console": "~1.2.7"
+        "typo3/cms": "^8.7",
+	    "helhum/typo3-console": "^4.5"
     }
 }
