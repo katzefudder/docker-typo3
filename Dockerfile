@@ -44,5 +44,5 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Install dependencies defined in composer.json
 ADD composer.json /app/
-#ADD composer.lock /app/
-RUN composer install && cp typo3conf/ext/typo3_console/Scripts/typo3cms .
+ADD composer.lock /app/
+RUN composer install
