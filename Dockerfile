@@ -3,7 +3,7 @@ MAINTAINER Florian Dehn
 
 # Install packages
 RUN apt-get update && \
-apt-get -yq --force-yes install mysql-client git curl imagemagick zip zlib1g-dev libxml2-dev libpng-dev && \
+apt-get -yq --force-yes install mysql-client git curl imagemagick zip zlib1g-dev libxml2-dev libjpeg-dev libpng-dev libfreetype6-dev && \
 rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod rewrite
