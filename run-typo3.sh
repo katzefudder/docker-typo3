@@ -27,7 +27,7 @@ then
     --site-name="TYPO3 Demo Installation" --site-setup-type="createsite"
 
     echo "Set permissions for /app folder ..."
-    chown www-data:www-data -R /app/fileadmin /app/typo3temp /app/uploads
+    chown www-data:www-data -R /app
 fi
 
 # Start apache in foreground if no arguments are given
