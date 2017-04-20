@@ -21,8 +21,8 @@ ADD run-typo3.sh /run-typo3.sh
 RUN chmod 755 /*.sh
 
 # Expose environment variables
-ENV DB_HOST db
-ENV DB_PORT 3306
+ENV DB_HOST **LinkMe**
+ENV DB_PORT **LinkMe**
 ENV DB_NAME typo3
 ENV DB_USER admin
 ENV DB_PASS **ChangeMe**
